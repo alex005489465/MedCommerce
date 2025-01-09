@@ -8,18 +8,11 @@ use Laravel\Fortify\Fortify;
 return new class extends Migration
 {
     /**
-     * The database connection that should be used by the migration.
-     *
-     * @var string
-     */
-    protected $connection = 'customer';
-
-    /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('customer')->table('users', function (Blueprint $table) {
             $table->text('two_factor_secret')
                 ->after('password')
                 ->nullable();
@@ -41,7 +34,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::connection('customer')->table('users', function (Blueprint $table) {
             $table->dropColumn(array_merge([
                 'two_factor_secret',
                 'two_factor_recovery_codes',

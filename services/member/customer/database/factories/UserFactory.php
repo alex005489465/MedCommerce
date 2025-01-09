@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $connection = 'customer';
+
     /**
      * The current password being used by the factory.
      */
@@ -41,4 +43,17 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the user's remember_token should be null.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function withoutRememberToken()
+    {
+        return $this->state(fn (array $attributes) => [
+            'remember_token' => null,
+        ]);
+    }
+
 }

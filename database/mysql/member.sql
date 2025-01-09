@@ -5,11 +5,9 @@ CREATE DATABASE customer;
 -- creates new role
 CREATE ROLE 'shop_dev';
 GRANT ALL PRIVILEGES ON shop.* TO 'shop_dev';
-REVOKE DROP ON shop.* FROM 'shop_dev';
 
 CREATE ROLE 'customer_dev';
 GRANT ALL PRIVILEGES ON customer.* TO 'customer_dev';
-REVOKE DROP ON customer.* FROM 'customer_dev';
 
 
 -- creates new user

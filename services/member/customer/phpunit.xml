@@ -18,10 +18,10 @@
         </include>
     </source>
     <logging>
-        <junit outputFile="tests/junit.xml"/>
-        <teamcity outputFile="tests/teamcity.txt"/> 
-        <!-- <testdoxHtml outputFile="tests/testdox.html"/> -->
-        <!-- <testdoxText outputFile="tests/testdox.txt"/> -->
+        <junit outputFile="tests/records/junit.xml"/>
+        <!-- <teamcity outputFile="tests/records/teamcity.txt"/>  -->
+        <!-- <testdoxHtml outputFile="tests/records/testdox.html"/> -->
+        <!-- <testdoxText outputFile="tests/records/testdox.txt"/> -->
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
