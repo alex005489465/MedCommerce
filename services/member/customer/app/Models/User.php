@@ -13,6 +13,11 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Get the connection name for the model.
+     */
+    protected $connection = 'customer';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

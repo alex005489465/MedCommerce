@@ -6,7 +6,7 @@
 
 ## member User
 ### member01 User Configuration
-- Username: `member01`
+- Username: `customer_001`
 - Password: `your_password`
 - Privileges: `ALL`, except drop on database.
-- Database: `member`
+- Database: `shop`, `customer`
