@@ -2,77 +2,77 @@
 
 require_once __DIR__ . '/helpers.php';
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Laravel\Fortify\Notifications\VerifyEmail;
-use App\Models\User;
-use Illuminate\Http\Request;
-
-//uses(RefreshDatabase::class);
-
-test('verification notification is sent', function () {
-    Notification::fake();
-
-    Notification::assertNothingSent();
-
-    /*
-    $user = createUnverifiedUser();
-
-    $this->actingAs($user)->postJson('/email/verification-notification');
-
-    Notification::assertSentTo(
-        [$user], VerifyEmail::class
-    );
-    */
-});
-
-
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
-test('verification notification is sent and logged', function () {
+test('verification notification is sent', function () {
     
-    //Notification::fake();
-    // 創建一個未驗證的用戶
+    Notification::fake();
+
     $user = createUnverifiedUser();
+
+    // Test with logged-in user
+    $verifyResponse = $this->actingAs($user)->postJson('/email/verification-notification'); 
     
-    // 模擬用戶登錄
-    $loginResponse = $this->postJson('/login', [
-        'email' => 'testuser@example.com',
-        'password' => 'password123',
-    ]);
+    $verifyResponse->assertStatus(202);
+    expect($verifyResponse->getContent())->toBe('""');
 
-    // 使用已登錄的用戶進行測試 
-    $this->actingAs($user); 
-    // 調用 sendEmailVerificationNotification 方法 
-    $user->sendEmailVerificationNotification(); 
-    // 檢查是否發送了 VerifyEmail 通知 
-    //Notification::assertSentTo($user, VerifyEmail::class);
+    //$user->sendEmailVerificationNotification(); 
 
-    $loginResponse->assertStatus(200); // 確認登錄成功
+    // Check if VerifyEmail notification was sent
+    Notification::assertSentTo($user, VerifyEmail::class);
 
-    // 發送驗證郵件通知
-    $verifyResponse = $this->postJson('/email/verification-notification');
-
-    $verifyResponse->assertStatus(202); // 確認通知發送成功
-
-    $responseContent = [
-        'status' => $verifyResponse->status(),
-        'headers' => $verifyResponse->headers->all(),
-        'content' => $verifyResponse->getContent(),
-    ];
-    file_put_contents('tests/records/response_dump02.txt', print_r($responseContent, true));
-    
     deleteUser('testuser@example.com');
-    //Notification::assertSentTo($user, VerifyEmail::class);
+    
     /*
-    // 檢查日誌文件中是否包含驗證郵件通知的記錄
+    // Check if the log file contains verification email notification records
     $logContent = File::get(storage_path('logs/laravel.log'));
     $this->assertStringContainsString('VerifyEmail', $logContent);
 
-    // 選擇性：可以輸出日誌內容以查看詳細信息
-    Log::info('Log Content: ' . $logContent);
-    */
+    // Create a temporary log channel
+    $tempLogChannel = new Logger('tempLogChannel');
+    $tempLogChannel->pushHandler(new StreamHandler(storage_path('mails/temp_lara.log'), Logger::INFO));
+    // Log using the temporary log channel
+    $tempLogChannel->info('Log Content: ' . $logContent);
+    
+    // Optional: Output log content to view details
+    //Log::info('Log Content: ' . $logContent);
+    */   
+});
+
+
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Carbon;
+
+test('email verification', function () {
+
+    $user = createUnverifiedUser();
+
+    // Generate verification URL
+    $verificationUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        Carbon::now()->addMinutes(60),
+        ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+    );
+
+    // Display URL in terminal
+    //echo "Verification URL: " . $verificationUrl . "\n";
+
+    // Simulate clicking the verification URL
+    $response = $this->actingAs($user)->getJson($verificationUrl);
+
+    // Confirm response status is 204
+    $response->assertStatus(204);
+    expect($response->getContent())->toBe('');
+
+    // Confirm user's email has been marked as verified
+    $this->assertTrue($user->fresh()->hasVerifiedEmail());
+
+    deleteUser('testuser@example.com');
 });
 
 
