@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/helpers.php';
+use Illuminate\Support\Facades\Auth;
 
 it('registers a user successfully', function () {
     $response = $this->post('/register', [

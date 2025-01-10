@@ -30,13 +30,7 @@
 
 更新用戶資料 (PUT user/profile-information)
 
-5. 健康檢查（Health Check）
-測試項目：
 
-應用程序健康檢查 (GET|HEAD up)
-
-
-## 單元測試
 
 ### 用戶註冊（Registration）
 測試成功註冊

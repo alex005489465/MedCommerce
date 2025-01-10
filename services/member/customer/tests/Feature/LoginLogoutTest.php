@@ -18,7 +18,7 @@ it('login successfully with correct JSON request', function () {
 });
 
 it('fails to login with incorrect password', function () {
-    $user = createUser();
+    createUser();
 
     $response = $this->postJson('/login', [
         'email' => 'testuser@example.com',
@@ -32,7 +32,7 @@ it('fails to login with incorrect password', function () {
 });
 
 it('fails to login with unregistered email', function () {
-    $user = createUser();
+    createUser();
 
     $response = $this->postJson('/login', [
         'email' => 'unregistered@example.com',

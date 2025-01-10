@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\RoutePath;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -32,6 +35,23 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+        
+        /*
+        Route::get(RoutePath::for('password.reset', '/reset-password/{token}'), [NewPasswordController::class, 'create'])
+                ->middleware(['web'])        
+                ->middleware(['guest:'.config('fortify.guard')])
+                ->name('password.reset');
+        */
+        ResetPassword::createUrlUsing(
+            function ($notifiable, $token) {
+                return '/reset-password/' . $token . '/' . $notifiable->getEmailForPasswordReset();
+            });
+        
+        /*
+        ResetPassword::createUrlUsing(function ($notifiable, $token) { 
+            return '/reset-password/' . $token . '/' . $notifiable->getEmailForPasswordReset(); 
+        });
+        */
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
