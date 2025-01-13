@@ -16,7 +16,7 @@ class EnsureJsonResponse
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->wantsJson()) {
-            return response()->json(['error' => 'This endpoint only accepts JSON requests.'], 406);
+            $request->headers->set('Accept', 'application/json');
         }
         return $next($request);
     }

@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->prepend(EnsureJsonResponse::class);
+        $middleware->web(remove: [
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
