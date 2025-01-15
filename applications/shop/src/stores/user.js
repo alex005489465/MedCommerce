@@ -32,9 +32,9 @@ export const useUserStore = defineStore('user', {
                     }),
                 });
 
-                if (response.status === 200) {
+                if (response.status === 201) {
                     const data = await response.json();
-                    if (data && data !== '') {
+                    if (data) {
                         this.loginstatus = true;
                         this.email = registerdata.email;
                     } else {
