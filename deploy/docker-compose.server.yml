@@ -2,14 +2,15 @@ include:
   - ./docker-compose.network.yml
 
 services:
-  nginx:
-    image: phpswoole/swoole:php8.4-alpine
-    container_name: my-nginx
+  customer-app:
+    image: customer-app:latest
+    container_name: customer-app
     ports:
-      - "8090:80"
+      - "8000:8000"
     #volumes:
     #  - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     #  - ./html:/usr/share/nginx/html:ro
+    #  - /service/.env.customer:/var/www/html/.env:ro
     #restart: always
     networks:
       - store
