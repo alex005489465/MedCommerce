@@ -12,20 +12,24 @@ RUN apk add --no-cache git \
 RUN git clone --branch develop https://github.com/alex005489465/MedCommerce.git /tmp/MedCommerce \
     && cp -r /tmp/MedCommerce/services/member/customer/* /var/www/html \
     && cp /tmp/MedCommerce/deploy/service/.env.customer /var/www/html/.env \
-    && cp /tmp/MedCommerce/deploy/service/php.ini.customer /usr/local/etc/php/php.ini \
+    #&& cp /tmp/MedCommerce/deploy/service/php.ini.customer /usr/local/etc/php/php.ini \
     && rm -rf /tmp/MedCommerce
     
 # 安裝 PHP 依賴包
 RUN composer install --no-dev
 
 # 複製啟動腳本到容器 
-COPY start.sh /var/www/html/start.sh
+#COPY start.sh /var/www/html/start.sh
 
 # 確保啟動腳本有可執行權限 
-RUN chmod +x /var/www/html/start.sh
+#RUN chmod +x /var/www/html/start.sh
 
 # 暴露端口
-EXPOSE 8000
+#EXPOSE 8000
 
 # 使用啟動腳本作為啟動命令 
-CMD ["/var/www/html/start.sh"]
+#CMD ["/var/www/html/start.sh"]
+
+WORKDIR /var/www/html/public
+
+CMD ["php", "-S", "0.0.0.0:8000", "index.php"]
