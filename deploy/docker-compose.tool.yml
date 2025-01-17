@@ -1,9 +1,9 @@
 
 services:
   ubuntu:
-    image: ubuntu:latest
-    container_name: my_ubuntu_container
+    image: scripteditor:latest
+    container_name: scripteditor_container
     volumes:
       - ./my-scripts:/scripts
     tty: true
-    command: /bin/bash
+    #command: /bin/bash
