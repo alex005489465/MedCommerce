@@ -1,4 +1,4 @@
-*/command run store/server/tool/all
+./command run store/server/tool/all
 
 docker build -t customer-app -f Dockerfile.customer .
 
