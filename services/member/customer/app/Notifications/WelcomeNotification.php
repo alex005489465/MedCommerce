@@ -41,21 +41,10 @@ class WelcomeNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Welcome to Med shop')
-            ->greeting('Hello ' . $this->user->name . ',')
+            ->greeting('Hello ' . $this->user->email . ',')
             ->line('Welcome to Med shop! We are excited to have you with us.')
             ->line('If you have any questions, feel free to reach out to us.')
             ->line('Thank you for joining us!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }

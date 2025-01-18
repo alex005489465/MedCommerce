@@ -12,30 +12,26 @@ return new class extends Migration
      * @var string
      */
     protected $connection = 'customer';
-
+    
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            //$table->string('name');
+        Schema::create('user_information', function (Blueprint $table) {
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            //$table->rememberToken();
+            $table->string('name')->nullable();
+            $table->string('nickname')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('profile_picture')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->text('address')->nullable();
+            $table->string('occupation')->nullable();
             $table->timestamps();
 
             $table->index('email');
         });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
-
     }
 
     /**
@@ -43,7 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');        
+        Schema::dropIfExists('user_information');
     }
 };

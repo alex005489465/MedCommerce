@@ -27,7 +27,7 @@ class LoginLogoutController extends Controller
             return response()->json([
                 'message' => 'Logged in successfully',
                 'user' => [
-                    'name' => $user->name,
+                    //'name' => $user->name,
                     'email' => $user->email,
                 ],
             ], 200);
