@@ -23,7 +23,7 @@ class UserInformationController extends Controller
             return response()->json(['error' => 'User information not found.'], 404);
         }
 
-        return response()->json($userInformation);
+        return response()->json($this->formatUserInformation($userInformation));
     }
 
     /**
@@ -54,6 +54,27 @@ class UserInformationController extends Controller
         // Update user information (excluding the email field)
         $userInformation->update($request->except('email'));
 
-        return response()->json($userInformation);
+        return response()->json($this->formatUserInformation($userInformation));
+    }
+
+    /**
+     * Format the user information to a standardized array.
+     *
+     * @param  \App\Models\UserInformation  $userInformation
+     * @return array
+     */
+    private function formatUserInformation(UserInformation $userInformation)
+    {
+        return [
+            'email' => $userInformation->email,
+            'name' => $userInformation->name,
+            'nickname' => $userInformation->nickname,
+            'gender' => $userInformation->gender,
+            'date_of_birth' => $userInformation->date_of_birth->toISOString(),
+            'profile_picture' => $userInformation->profile_picture,
+            'phone_number' => $userInformation->phone_number,
+            'address' => $userInformation->address,
+            'occupation' => $userInformation->occupation,
+        ];
     }
 }

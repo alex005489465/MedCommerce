@@ -19,7 +19,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_information', function (Blueprint $table) {
-            $table->string('email')->unique();
+            $table->string('email')->primary();
             $table->string('name')->nullable();
             $table->string('nickname')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();

@@ -2,11 +2,12 @@
 
 use App\Models\User;
 use App\Models\UserInformation;
+use Illuminate\Support\Facades\Auth;
 
 it('successfully retrieves user information', function () {
     // Create a test user and corresponding user_information data
     $user = User::factory()->create();
-    UserInformation::factory()->create(['email' => $user->email]);
+    $userInformation = UserInformation::factory()->create(['email' => $user->email]);
 
     // Simulate user login
     $this->actingAs($user);
@@ -16,8 +17,18 @@ it('successfully retrieves user information', function () {
 
     // Verify successful data retrieval
     $response->assertStatus(200);
+    
+    // Verify the returned JSON data includes all fields
     $response->assertJson([
-        'email' => $user->email,
+        'email' => $userInformation->email,
+        'name' => $userInformation->name,
+        'nickname' => $userInformation->nickname,
+        'gender' => $userInformation->gender,
+        'date_of_birth' => $userInformation->date_of_birth->toISOString(),
+        'profile_picture' => $userInformation->profile_picture,
+        'phone_number' => $userInformation->phone_number,
+        'address' => $userInformation->address,
+        'occupation' => $userInformation->occupation,
     ]);
 });
 
@@ -54,3 +65,67 @@ it('fails to retrieve user information if not authenticated', function () {
         'message' => 'Please log in to proceed',
     ]);
 });
+
+it('updates user information successfully', function () {
+    // 建立使用者和使用者資訊
+    $user = User::factory()->create();
+    UserInformation::factory()->create(['email' => $user->email]);
+
+    // 模擬使用者登入
+    $this->actingAs($user);
+
+    // 模擬更新請求
+    $response = $this->post('/user-information', [
+        'email' => $user->email, // 確保包含 email 字段
+        'name' => 'New Name',
+        'address' => 'New Address',
+    ]);
+
+    // 檢查回傳狀態碼 200
+    $response->assertStatus(200);
+
+    // 檢查回傳的 JSON 資訊
+    $response->assertJsonFragment([
+        'email' => $user->email,
+        'name' => 'New Name',
+        'address' => 'New Address',
+    ]);
+
+    // 確認數據庫中使用者資訊已更新
+    $this->assertDatabaseHas('customer.user_information', [
+        'email' => $user->email,
+        'name' => 'New Name',
+        'address' => 'New Address',
+    ]);
+});
+
+
+it('returns 403 when email does not match', function () {
+    $user = User::factory()->create();
+    UserInformation::factory()->create(['email' => $user->email]);
+
+    Auth::login($user);
+    $response = $this->post('/user-information', [
+        'email' => 'wrong@example.com',
+        'name' => 'New Name',
+        'address' => 'New Address',
+    ]);
+
+    $response->assertStatus(403);
+    $response->assertJson(['error' => 'Email mismatch. Update failed.']);
+});
+
+it('returns 404 when user information not found', function () {
+    $user = User::factory()->create();
+    Auth::login($user);
+
+    $response = $this->post('/user-information', [
+        'email' => $user->email,
+        'name' => 'New Name',
+        'address' => 'New Address',
+    ]);
+
+    $response->assertStatus(404);
+    $response->assertJson(['error' => 'User information not found.']);
+});
+

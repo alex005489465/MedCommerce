@@ -23,6 +23,21 @@ class UserInformation extends Model
      */
     protected $table = 'user_information';
 
+    protected $primaryKey = 'email';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,13 +54,5 @@ class UserInformation extends Model
         'address',
         'occupation',
     ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'date_of_birth' => 'date',
-    ];
+    
 }
