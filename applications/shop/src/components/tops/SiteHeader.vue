@@ -1,5 +1,14 @@
 <script setup>
+import { useUserStore } from '@/stores/user';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
+const userStore = useUserStore();
+const isLogin = userStore.isLogin;
+
+const handleLogout = async () => {
+  await userStore.logout();
+};
 </script>
 
 <template>
@@ -7,7 +16,8 @@
     <img src="/logo.png" alt="Shop Logo" style="height: 50px; margin-right: 20px;">
     <div class="header-content">
       <h1>Welcome to Health Shop</h1>
-      <RouterLink to="/login">Login</RouterLink>
+      <RouterLink v-if="!isLogin" to="/login">Login</RouterLink>
+      <RouterLink v-else @click.prevent="handleLogout" to="/">Logout</RouterLink>
     </div>
   </header>
 </template>

@@ -1,7 +1,11 @@
 ./command run store/server/tool/all
 
+docker-compose -p frontend -f docker-compose.front.yml up -d
+
+
 docker build -t customer-app -f Dockerfile.customer .
 docker build --no-cache -t customer-app -f Dockerfile.customer .
+docker build -t shop-app -f Dockerfile.shop .
 
 
 cd..

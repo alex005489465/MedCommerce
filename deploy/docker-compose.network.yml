@@ -5,3 +5,6 @@ networks:
   service:
     name: backend_service
     driver: bridge
+  frontend:
+    name: frontend
+    driver: bridge

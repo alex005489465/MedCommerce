@@ -4,15 +4,16 @@ import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const userStore = useUserStore();
-const email = ref('');
-const password = ref('');
+const handleSubmit = () => { 
+  userStore.login({ email: email.value, password: password.value }); 
+};
 
 </script>
 
 <template>
   <div>
     <h1>Login</h1>
-    <form @submit.prevent="userStore.login(email, password)">
+    <form @submit.prevent="handleSubmit">
       <label for="email">Email</label>
       <input id="email" v-model="email" type="email" required autocomplete="email">
       <label for="password">Password</label>

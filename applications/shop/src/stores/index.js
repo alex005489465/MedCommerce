@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useIndexStore = defineStore('index', {
     state: () => ({
-        apibaseURL: 'http://127.0.0.1:8000',
+        apibaseURL: 'http://127.0.0.1:8080',
     }),
     getters: {
         getBaseURL: (state) => state.apibaseURL,
