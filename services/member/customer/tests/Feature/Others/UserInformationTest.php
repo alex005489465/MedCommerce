@@ -32,6 +32,32 @@ it('successfully retrieves user information', function () {
     ]);
 });
 
+it('formatUserInformation returns empty values for null attributes', function () {
+    
+    $userData = [
+        'email' => fake()->safeEmail,
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ];
+    $this->post('/register', $userData);
+    Auth::login(User::where('email', $userData['email'])->first());
+
+    $response = $this->get('/user-information');
+    $response->assertStatus(200);
+    $response->assertJson([
+        'email' => $userData['email'],
+        'name' => '',
+        'nickname' => '',
+        'gender' => '',
+        'date_of_birth' => '',
+        'profile_picture' => '',
+        'phone_number' => '',
+        'address' => '',
+        'occupation' => '',
+    ]);
+
+});
+
 it('fails to retrieve user information if not exists', function () {
     // Create a test user but do not create corresponding user_information data
     $user = User::factory()->create();

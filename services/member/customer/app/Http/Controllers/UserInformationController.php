@@ -67,14 +67,14 @@ class UserInformationController extends Controller
     {
         return [
             'email' => $userInformation->email,
-            'name' => $userInformation->name,
-            'nickname' => $userInformation->nickname,
-            'gender' => $userInformation->gender,
-            'date_of_birth' => $userInformation->date_of_birth->toISOString(),
-            'profile_picture' => $userInformation->profile_picture,
-            'phone_number' => $userInformation->phone_number,
-            'address' => $userInformation->address,
-            'occupation' => $userInformation->occupation,
+            'name' => $userInformation->name ?: '',
+            'nickname' => $userInformation->nickname ?: '',
+            'gender' => $userInformation->gender ?: '',
+            'date_of_birth' => $userInformation->date_of_birth ? $userInformation->date_of_birth->toISOString() : '',
+            'profile_picture' => $userInformation->profile_picture ?: '',
+            'phone_number' => $userInformation->phone_number ?: '',
+            'address' => $userInformation->address ?: '',
+            'occupation' => $userInformation->occupation ?: '',
         ];
     }
 }

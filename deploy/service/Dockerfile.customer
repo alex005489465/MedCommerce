@@ -12,7 +12,7 @@ RUN apk add --no-cache git \
 RUN git clone --branch develop https://github.com/alex005489465/MedCommerce.git /tmp/MedCommerce \
     && cp -r /tmp/MedCommerce/services/member/customer/* /var/www/html \
     && cp /tmp/MedCommerce/deploy/service/.env.customer /var/www/html/.env \
-    #&& cp /tmp/MedCommerce/deploy/service/start.shy /usr/local/bin/start \
+    && cp /tmp/MedCommerce/deploy/service/start /usr/local/bin/start \
     #&& cp /tmp/MedCommerce/deploy/service/php.ini.customer /usr/local/etc/php/php.ini \
     && rm -rf /tmp/MedCommerce
     
@@ -21,7 +21,8 @@ RUN composer install --no-dev
 
 #複製啟動腳本到容器 
 #COPY ./start.shy /var/www/html/start
-COPY ./start.shy /usr/local/bin/start
+#COPY ./start /usr/local/bin/start
+#COPY ./.env.customer /var/www/html/.env 
 
 # 確保啟動腳本有可執行權限 
 #RUN chmod +x /var/www/html/start
