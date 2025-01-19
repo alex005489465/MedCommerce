@@ -1,0 +1,20 @@
+# 使用基礎鏡像 nginx:alpine-perl
+FROM nginx:alpine-perl
+
+# 設置工作目錄
+WORKDIR /usr/share/nginx/html
+
+# 移除默認的 nginx 靜態資源
+RUN rm -rf ./*
+
+# 複製當前目錄的 dist 文件夾內容到 nginx 的 html 文件夾
+COPY dist/ .
+
+# 複製 nginx 配置文件到容器內部
+#COPY nginx.conf /etc/nginx/nginx.conf
+
+# 暴露端口 80
+EXPOSE 80
+
+# 啟動 nginx
+CMD ["nginx", "-g", "daemon off;"]

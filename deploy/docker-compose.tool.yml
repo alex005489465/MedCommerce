@@ -1,0 +1,9 @@
+
+services:
+  ubuntu:
+    image: scripteditor:latest
+    container_name: scripteditor_container
+    volumes:
+      - ./my-scripts:/scripts
+    tty: true
+    #command: /bin/bash

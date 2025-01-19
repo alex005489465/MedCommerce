@@ -1,0 +1,14 @@
+include:
+  - ./docker-compose.network.yml
+
+services:
+  shop-app:
+    image: shop-app:latest # 使用之前構建的鏡像
+    ports:
+      - "8090:80" # 將容器的 80 端口綁定到主機的 80 端口
+    restart: always # 確保容器在崩潰後自動重新啟動
+    #volumes:
+      #- ./application/dist:/usr/share/nginx/html # 將本地 dist 目錄掛載到容器內部
+    networks:
+      - frontend # 使用之前定義的 frontend 網絡
+      - service # 使用之前定義的 service 網絡

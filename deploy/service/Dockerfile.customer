@@ -1,0 +1,43 @@
+# 使用 Swoole 基礎映像
+FROM phpswoole/swoole:php8.4-alpine
+
+# 設置工作目錄
+WORKDIR /var/www/html
+
+# 安裝 git
+RUN apk add --no-cache git \ 
+    && docker-php-ext-install pcntl
+
+# 克隆 GitHub 倉庫並切換到 develop 分支，然後只複製 customer 資料夾內的內容
+RUN git clone --branch develop https://github.com/alex005489465/MedCommerce.git /tmp/MedCommerce \
+    && cp -r /tmp/MedCommerce/services/member/customer/* /var/www/html \
+    && cp /tmp/MedCommerce/deploy/service/.env.customer /var/www/html/.env \
+    && cp /tmp/MedCommerce/deploy/service/start /usr/local/bin/start \
+    #&& cp /tmp/MedCommerce/deploy/service/php.ini.customer /usr/local/etc/php/php.ini \
+    && rm -rf /tmp/MedCommerce
+    
+# 安裝 PHP 依賴包
+RUN composer install --no-dev
+
+#複製啟動腳本到容器 
+#COPY ./start.shy /var/www/html/start
+#COPY ./start /usr/local/bin/start
+#COPY ./.env.customer /var/www/html/.env 
+
+# 確保啟動腳本有可執行權限 
+#RUN chmod +x /var/www/html/start
+RUN chmod +x /usr/local/bin/start
+
+# 暴露端口
+EXPOSE 8000
+
+ENTRYPOINT ["/bin/sh", "-c"]
+# 使用啟動腳本作為啟動命令 
+#CMD ["/var/www/html/start.sh"]
+#CMD [ "/var/www/html/start" ]
+CMD [ "start" ]
+
+#CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0"]
+
+#WORKDIR /var/www/html/public
+#CMD ["php", "-S", "0.0.0.0:8000", "index.php"]

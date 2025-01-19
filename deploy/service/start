@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+# Generate application encryption key
+php artisan key:generate
+
+# deal queue
+php artisan queue:work &
+
+# Start Octane Swoole service
+php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 --workers=auto --task-workers=auto --max-requests=500
+
+# Change working directory
+cd /var/www/html/public
+

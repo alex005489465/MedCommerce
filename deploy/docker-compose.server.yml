@@ -1,0 +1,17 @@
+include:
+  - ./docker-compose.network.yml
+
+services:
+  customer-app:
+    image: customer-app:latest
+    container_name: customer-app
+    ports:
+      - "8080:8000"
+    #volumes:
+    #  - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    #  - ./html:/usr/share/nginx/html:ro
+    #  - /service/.env.customer:/var/www/html/.env:ro
+    #restart: always
+    networks:
+      - store
+      - service

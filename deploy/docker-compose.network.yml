@@ -1,0 +1,10 @@
+networks:
+  store:
+    name: backend_store
+    driver: bridge
+  service:
+    name: backend_service
+    driver: bridge
+  frontend:
+    name: frontend
+    driver: bridge

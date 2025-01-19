@@ -1,0 +1,33 @@
+include:
+  - ./docker-compose.network.yml
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: store_manage
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - TZ=Asia/Taipei
+    ports:
+      - 30420:3306
+    volumes:
+      - './../volumes/database/store_manage:/var/lib/mysql'
+    networks:
+      - store
+  redis:
+    image: redis:latest
+    container_name: store_redis
+    environment:
+      - TZ=Asia/Taipei
+    ports:
+      - 30421:6379
+    volumes:
+      - './../volumes/database/store_redis:/data'
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    networks:
+      - store
+
+
+
+
